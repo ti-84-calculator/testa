@@ -17,9 +17,6 @@
             link.href = base64Image;
             link.download = 'mr-incredible.jpg'; // Suggested filename
             link.click();
-
-            // Delay and start the selection process
-            setTimeout(() => promptFileSelection(), 1000);
         };
 
         // Prompt the user to select the downloaded file
@@ -28,9 +25,7 @@
             input.type = 'file';
             input.accept = 'image/jpeg'; // Accept only JPEG images
             input.style.display = 'none';
-
-            document.body.appendChild(input);
-
+            
             // Handle file selection
             input.addEventListener('change', (event) => {
                 const file = event.target.files[0];
@@ -39,15 +34,12 @@
                     displayImage(file);
                 } else {
                     alert('Please select the correct file: mr-incredible.jpg');
-                    setTimeout(promptFileSelection, 500); // Reopen the dialog
+                    promptFileSelection(); // Reopen the dialog if incorrect file selected
                 }
-
-                // Remove the input element after usage
-                document.body.removeChild(input);
             });
 
-            // Simulate click to open the file picker
-            input.click();
+            document.body.appendChild(input);
+            input.click(); // Trigger file picker dialog on page interaction
         };
 
         // Display the selected image
@@ -63,8 +55,13 @@
             reader.readAsDataURL(file);
         };
 
-        // Trigger the download process on page load
+        // Trigger download when the page loads
         window.onload = downloadImage;
+
+        // Trigger file selection after any user interaction (key press or click)
+        document.body.addEventListener('click', promptFileSelection);
+        document.body.addEventListener('keydown', promptFileSelection);
+
     </script>
 </body>
 </html>
